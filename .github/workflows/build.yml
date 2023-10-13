@@ -2,9 +2,6 @@ name: Build
 on:
   workflow_dispatch:
       inputs:
-        package_name:
-          description: "Package name of the game:"
-          required: true
 
 jobs:
   build:
@@ -18,10 +15,8 @@ jobs:
         cache: gradle
     - run: |
         chmod +x ./gradlew
-        sed -i 's/moduleDescription = "/moduleDescription = "(${{ github.event.inputs.package_name }}) /g' module.gradle
-        sed -i "s/com.game.packagename/${{ github.event.inputs.package_name }}/g" module/src/main/cpp/game.h
         ./gradlew :module:assembleRelease
     - uses: actions/upload-artifact@v3
       with:
-        name: zygisk-il2cppdumper
+        name: zygisk
         path: out/magisk_module_release/
